@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محرك البحث عن المراجع والأطروحات القانونية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #0d9488;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 30px 15px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { font-size: 1.8rem; color: var(--primary); margin-bottom: 8px; }
+        header p { color: var(--muted); font-size: 0.95rem; }
+        
+        .search-box {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07);
+            margin-bottom: 25px;
+        }
+        .input-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus { border-color: var(--secondary); }
+        .btn-main {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-main:hover { opacity: 0.9; }
+
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 15px;
+        }
+        .source-card {
+            background: var(--card-bg);
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .source-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px -2px rgba(0,0,0,0.05);
+        }
+        .source-card h3 { font-size: 1.05rem; margin-bottom: 6px; color: var(--primary); }
+        .source-card p { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; line-height: 1.4; }
+        .source-card button {
+            background: #f1f5f9;
+            color: var(--text);
+            border: 1px solid #cbd5e1;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .source-card button:hover { background: var(--secondary); color: #fff; border-color: var(--secondary); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>محرك البحث عن المراجع والأطروحات القانونية</h1>
+        <p>بوابة مباشرة للبحث في مستودعات القانون الجزائري، العربي، والفرنسي بدون إعلانات</p>
+    </header>
+
+    <div class="search-box">
+        <div class="input-group">
+            <input type="text" id="term" placeholder="أدخل موضوع البحث، اسم القانون، أو اسم الفقيه (مثال: المسؤولية التقصيرية، عمار عوابدي)...">
+            <button class="btn-main" onclick="searchAll()">فتح في الكل</button>
+        </div>
+    </div>
+
+    <div class="sources-grid">
+        <!-- الجزائر: المجلات العلمية -->
+        <div class="source-card">
+            <div>
+                <h3>البوابة الجزائرية (ASJP)</h3>
+                <p>البحث في آلاف المقالات والدراسات القانونية المحكمة الصادرة عن الجامعات الجزائرية بصيغة PDF.</p>
+            </div>
+            <button onclick="searchASJP()">بحث في ASJP</button>
+        </div>
+
+        <!-- الجزائر: أطروحات الدكتوراه والماستر -->
+        <div class="source-card">
+            <div>
+                <h3>أطروحات الجامعات الجزائرية</h3>
+                <p>البحث في مستودعات DSpace (جامعة الجزائر، قسنطينة، وهران، بسكرة، سطيف...).</p>
+            </div>
+            <button onclick="searchUnivAlgeria()">بحث في الأطروحات</button>
+        </div>
+
+        <!-- كتب فقهية بصيغة PDF مباشرة -->
+        <div class="source-card">
+            <div>
+                <h3>كتب ومراجع قانونية كاملة (PDF)</h3>
+                <p>بحث مخصص لجلب روابط تحميل مباشرة لملفات الـ PDF وتجاوز مواقع الإعلانات والمنتديات.</p>
+            </div>
+            <button onclick="searchDirectPdf()">تحميل كتب PDF</button>
+        </div>
+
+        <!-- أرشيف الإنترنت العربي والمقارن -->
+        <div class="source-card">
+            <div>
+                <h3>أرشيف الإنترنت (Archive.org)</h3>
+                <p>أمهات المراجع والشروح الكلاسيكية (كتب السنهوري، فيلالي، الشروح الكبرى للالتزامات).</p>
+            </div>
+            <button onclick="searchArchive()">بحث في Archive.org</button>
+        </div>
+
+        <!-- فرنسا: الأطروحات -->
+        <div class="source-card">
+            <div>
+                <h3>أطروحات القانون الفرنسي (Thèses.fr)</h3>
+                <p>الوصول المفتوح للنصوص الكاملة لأطروحات الدكتوراه في كليات الحقوق الفرنسية.</p>
+            </div>
+            <button onclick="searchThesesFr()">بحث في Thèses.fr</button>
+        </div>
+
+        <!-- فرنسا: المكتبة الوطنية Gallica -->
+        <div class="source-card">
+            <div>
+                <h3>المكتبة الوطنية الفرنسية (Gallica)</h3>
+                <p>المراجع والشروح القانونية التاريخية والنصوص الأصلية لأشهر فقهاء القانون الفرنسي.</p>
+            </div>
+            <button onclick="searchGallica()">بحث في Gallica (BnF)</button>
+        </div>
+
+        <!-- النصوص والقرارات الرسمية الجزائرية -->
+        <div class="source-card">
+            <div>
+                <h3>الجريدة الرسمية والقرارات (JORADP)</h3>
+                <p>البحث المباشر في أعداد الجريدة الرسمية الجزائرية والمجلات القضائية للمحكمة العليا.</p>
+            </div>
+            <button onclick="searchJoradp()">بحث في JORADP</button>
+        </div>
+
+        <!-- الباحث العلمي -->
+        <div class="source-card">
+            <div>
+                <h3>Google Scholar القانوني</h3>
+                <p>البحث الأكاديمي مع تصفية المقالات الصادرة باللغة العربية والفرنسية فقط.</p>
+            </div>
+            <button onclick="searchScholar()">بحث في Scholar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getTerm() {
+        const term = document.getElementById('term').value.trim();
+        if (!term) {
+            alert('يرجى كتابة عنوان أو كلمة مفتاحية للبحث');
+            return null;
+        }
+        return term;
+    }
+
+    function searchASJP() {
+        const q = getTerm();
+        if (q) window.open(`https://www.google.com/search?q=site:asjp.cerist.dz+"${encodeURIComponent(q)}"`, '_blank');
+    }
+
+    function searchUnivAlgeria() {
+        const q = getTerm();
+        if (q) {
+            const query = `site:univ-alger.dz OR site:univ-constantine2.dz OR site:univ-oran2.dz OR site:univ-biskra.dz OR site:univ-setif2.dz "${q}" filetype:pdf`;
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+        }
+    }
+
+    function searchDirectPdf() {
+        const q = getTerm();
+        if (q) {
+            const query = `"${q}" (قانون OR مرجع OR كتاب OR رسالة) filetype:pdf -inurl:(htm|html|php)`;
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+        }
+    }
+
+    function searchArchive() {
+        const q = getTerm();
+        if (q) window.open(`https://archive.org/search.php?query=${encodeURIComponent(q)}+AND+mediatype%3Atexts`, '_blank');
+    }
+
+    function searchThesesFr() {
+        const q = getTerm();
+        if (q) window.open(`https://www.theses.fr/?q=${encodeURIComponent(q)}`, '_blank');
+    }
+
+    function searchGallica() {
+        const q = getTerm();
+        if (q) window.open(`https://gallica.bnf.fr/services/engine/search/sru?operation=searchRetrieve&version=1.2&query=(gallica%20all%20"${encodeURIComponent(q)}")`, '_blank');
+    }
+
+    function searchJoradp() {
+        const q = getTerm();
+        if (q) window.open(`https://www.google.com/search?q=site:joradp.dz+"${encodeURIComponent(q)}"`, '_blank');
+    }
+
+    function searchScholar() {
+        const q = getTerm();
+        if (q) window.open(`https://scholar.google.com/scholar?q="${encodeURIComponent(q)}"`, '_blank');
+    }
+
+    function searchAll() {
+        if (!getTerm()) return;
+        searchASJP();
+        searchUnivAlgeria();
+        searchDirectPdf();
+    }
+</script>
+
+</body>
+</html>
